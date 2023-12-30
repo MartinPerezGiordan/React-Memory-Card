@@ -3,13 +3,24 @@ import "./App.css";
 import SingleCard from "./components/SingleCard";
 import confetti from "canvas-confetti";
 
+//const cardImages = [
+//  { src: "./img/potion-1.png", matched: false },
+//  { src: "./img/helmet-1.png", matched: false },
+//  { src: "./img/ring-1.png", matched: false },
+//  { src: "./img/scroll-1.png", matched: false },
+//  { src: "./img/shield-1.png", matched: false },
+//  { src: "./img/sword-1.png", matched: false },
+//];
+
 const cardImages = [
-  { src: "./img/potion-1.png", matched: true },
-  { src: "./img/helmet-1.png", matched: true },
-  { src: "./img/ring-1.png", matched: true },
-  { src: "./img/scroll-1.png", matched: true },
-  { src: "./img/shield-1.png", matched: false },
-  { src: "./img/sword-1.png", matched: false },
+  { src: "./img/cookie.png", matched: false },
+  { src: "./img/gingerbread.png", matched: false },
+  { src: "./img/glove.png", matched: false },
+  { src: "./img/present.png", matched: false },
+  { src: "./img/xmas-star.png", matched: false },
+  { src: "./img/xmas-tree.png", matched: false },
+  { src: "./img/sock.png", matched: false },
+  { src: "./img/cane.png", matched: false },
 ];
 
 function App() {
@@ -20,11 +31,26 @@ function App() {
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [win, setWin] = useState(false);
+  const [showDifficultyMenu, setShowDifficultyMenu] = useState(false);
+  const [difficulty, setDifficulty] = useState("medium");
 
   //shuffleCards
 
   const shuffleCards = () => {
-    const shuffledCards = [...cardImages, ...cardImages]
+    let cardsToDisplay;
+    console.log(difficulty);
+    switch (difficulty) {
+      case "easy":
+        cardsToDisplay = cardImages.slice(0, 4);
+        break;
+      case "medium":
+        cardsToDisplay = cardImages.slice(0, 6);
+        break;
+      case "hard":
+        cardsToDisplay = cardImages;
+        break;
+    }
+    const shuffledCards = [...cardsToDisplay, ...cardsToDisplay]
       .sort(() => Math.random() - 0.5)
       .map((card) => ({ ...card, id: Math.random() }));
 
@@ -118,10 +144,55 @@ function App() {
 
   useEffect(() => shuffleCards(), []);
 
+  const handleDifficultyClick = () => {
+    setShowDifficultyMenu(!showDifficultyMenu);
+  };
+
+  const handleDifficultyChange = (difficulty) => {
+    setDifficulty(difficulty);
+    handleDifficultyClick();
+  };
+
+  //Change game difficulty
+  useEffect(() => shuffleCards(), [difficulty]);
+
+  const displayDifficultyMenu = () => {
+    if (showDifficultyMenu) {
+      return (
+        <div className="options">
+          <button
+            className={difficulty == "easy" ? "selected" : ""}
+            onClick={() => handleDifficultyChange("easy")}
+          >
+            Easy
+          </button>
+          <button
+            className={difficulty == "medium" ? "selected" : ""}
+            onClick={() => handleDifficultyChange("medium")}
+          >
+            Medium
+          </button>
+          <button
+            className={difficulty == "hard" ? "selected" : ""}
+            onClick={() => handleDifficultyChange("hard")}
+          >
+            Hard
+          </button>
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="App">
       <h1>Memory Game</h1>
-      <button onClick={shuffleCards}>New Game</button>
+      <div>
+        <button onClick={shuffleCards}>New Game</button>
+        <button onClick={handleDifficultyClick}>Difficulty</button>
+      </div>
+
+      {displayDifficultyMenu()}
+
       {win ? (
         <div className="win">
           <h1>WINNER</h1>
