@@ -61,9 +61,8 @@ function App() {
   useEffect(() => {
     console.log("hola");
 
-    if (HighScore > turns && turns > 0) {
-      console.log(turns);
-      setHighScore(turns);
+    if (HighScore < score && turns > 0) {
+      setHighScore(score);
     }
   }, [win]);
 
@@ -182,6 +181,8 @@ function App() {
     }
   };
 
+  let score = 100 - turns * 3;
+
   return (
     <div className="App">
       <h1>Memory Game</h1>
@@ -200,6 +201,8 @@ function App() {
       {win ? (
         <div className="win">
           <h1>WINNER</h1>
+          <h2>Score: {score}</h2>
+          <button onClick={shuffleCards}>New Game</button>
         </div>
       ) : (
         ""
@@ -216,7 +219,7 @@ function App() {
         ))}
       </div>
       <div className="info">
-        <h2>Turns: {turns}</h2>
+        <h2>Score: {score}</h2>
         <h2>HighScore: {HighScore == 1000 ? "0" : HighScore} </h2>
       </div>
     </div>
