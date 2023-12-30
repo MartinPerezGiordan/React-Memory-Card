@@ -2,15 +2,9 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import SingleCard from "./components/SingleCard";
 import confetti from "canvas-confetti";
-
-//const cardImages = [
-//  { src: "./img/potion-1.png", matched: false },
-//  { src: "./img/helmet-1.png", matched: false },
-//  { src: "./img/ring-1.png", matched: false },
-//  { src: "./img/scroll-1.png", matched: false },
-//  { src: "./img/shield-1.png", matched: false },
-//  { src: "./img/sword-1.png", matched: false },
-//];
+import shuffleMp3 from "../public/audio/shuffle.mp3";
+import matchMp3 from "../public/audio/match.mp3";
+import successMp3 from "../public/audio/success.mp3";
 
 const cardImages = [
   { src: "./img/cookie.png", matched: false },
@@ -35,8 +29,9 @@ function App() {
   const [difficulty, setDifficulty] = useState("medium");
 
   //shuffleCards
-
   const shuffleCards = () => {
+    const shuffleSound = new Audio(shuffleMp3);
+    shuffleSound.play();
     let cardsToDisplay;
     console.log(difficulty);
     switch (difficulty) {
@@ -77,21 +72,23 @@ function App() {
   useEffect(() => {
     if (!cards.some((card) => !card.matched) && cards.some((card) => card)) {
       setWin(true);
+      const successSound = new Audio(successMp3);
+      successSound.play();
 
       //This code just throws conffeti when there is a winner
       var end = Date.now() + 2 * 1000;
-      var colors = ["#bb0000", "#ffffff"];
+      var colors = ["#DA3F3D", "#057C17", "#fff"];
 
       (function frame() {
         confetti({
-          particleCount: 2,
+          particleCount: 3,
           angle: 60,
           spread: 55,
           origin: { x: 0 },
           colors: colors,
         });
         confetti({
-          particleCount: 2,
+          particleCount: 3,
           angle: 120,
           spread: 55,
           origin: { x: 1 },
@@ -125,6 +122,8 @@ function App() {
         setCards((prevCards) => {
           return prevCards.map((card) => {
             if (card.src === choiceOne.src) {
+              const matchSound = new Audio(matchMp3);
+              matchSound.play();
               return { ...card, matched: true };
             } else {
               return card;
@@ -159,7 +158,7 @@ function App() {
   const displayDifficultyMenu = () => {
     if (showDifficultyMenu) {
       return (
-        <div className="options">
+        <div className="options container">
           <button
             className={difficulty == "easy" ? "selected" : ""}
             onClick={() => handleDifficultyChange("easy")}
@@ -186,9 +185,14 @@ function App() {
   return (
     <div className="App">
       <h1>Memory Game</h1>
-      <div>
+      <div className="container">
         <button onClick={shuffleCards}>New Game</button>
-        <button onClick={handleDifficultyClick}>Difficulty</button>
+        <button
+          className={showDifficultyMenu ? "selected" : ""}
+          onClick={handleDifficultyClick}
+        >
+          Difficulty
+        </button>
       </div>
 
       {displayDifficultyMenu()}
