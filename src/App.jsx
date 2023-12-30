@@ -4,10 +4,10 @@ import SingleCard from "./components/SingleCard";
 import confetti from "canvas-confetti";
 
 const cardImages = [
-  { src: "./img/potion-1.png", matched: false },
-  { src: "./img/helmet-1.png", matched: false },
-  { src: "./img/ring-1.png", matched: false },
-  { src: "./img/scroll-1.png", matched: false },
+  { src: "./img/potion-1.png", matched: true },
+  { src: "./img/helmet-1.png", matched: true },
+  { src: "./img/ring-1.png", matched: true },
+  { src: "./img/scroll-1.png", matched: true },
   { src: "./img/shield-1.png", matched: false },
   { src: "./img/sword-1.png", matched: false },
 ];
@@ -15,7 +15,7 @@ const cardImages = [
 function App() {
   const [cards, setCards] = useState([]);
   const [turns, setTurns] = useState(0);
-  const [HighScore, setHighScore] = useState(0);
+  const [HighScore, setHighScore] = useState(1000);
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disabled, setDisabled] = useState(false);
@@ -37,16 +37,18 @@ function App() {
 
   //Set HighScore
 
-  const checkHighScore = (prevHS) => {
-    if (prevHS < turns) {
+  useEffect(() => {
+    console.log("hola");
+
+    if (HighScore > turns && turns > 0) {
+      console.log(turns);
       setHighScore(turns);
     }
-  };
+  }, [win]);
 
   //Check for a win
 
   useEffect(() => {
-    console.log(win);
     if (!cards.some((card) => !card.matched) && cards.some((card) => card)) {
       setWin(true);
 
@@ -140,7 +142,7 @@ function App() {
       </div>
       <div className="info">
         <h2>Turns: {turns}</h2>
-        <h2>HighScore: </h2>
+        <h2>HighScore: {HighScore == 1000 ? "0" : HighScore} </h2>
       </div>
     </div>
   );
