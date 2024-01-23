@@ -11,7 +11,7 @@ The React Memory Card Game is an engaging application that challenges users to t
 
 ## Demo 🚀
 
-[Try Live Demo](https://MartinPerezGiordan.github.io/React-Memory-Card)
+[Try Live Demo](https://65afe734662e390565b5964b--react-memory-game-martin.netlify.app/)
 
 ## Features 🕶
 
